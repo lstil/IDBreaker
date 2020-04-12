@@ -1,35 +1,27 @@
+import random
+      
+'''    
+My ID checker function wasn't sufficient and tbh I'm bored with this project
+so I found another function at Github which is more pythonic.
+My ID generating function is working fine and fast and it's the only example in this category ;)
+ 
+'''
+
+
 def idc(code):
-    try:
-        code = int( code )
-    except:
-        return False
-
-    range_id = range( 1, 733 )
-    str_code = str( code )
+    # credits goes to: https://github.com/RezaOptic/irvalidator-python/blob/develop/irvalidator/nationalid.py
+    code = "0" * (len(code) - 10) + code
+    code = list(map(int, code[::-1]))
+    temp = 0
+    for index, digit in enumerate(code[1:]):
+        temp += digit * (index+2)
+        
+    r = divmod(temp, 11)[1]
+    if r < 2 and r == code[0]:
+        return True
+    elif r >= 2 and (11 - r) == code[0]:
+        return True
     
-    if len( str_code ) == 8:
-        str_code = '0' * 2 + str_code
-    if len( str_code ) == 9:
-        str_code = '0' + str_code
-    if int( str_code[ 0 ] ) == 0 and int( str_code[ 1 ] ) == 0:
-        _part_id = str_code[ 2 ]
-    elif int( str_code[ 0 ] ) == 0:
-        _part_id = str_code[ 1 ] + str_code[ 2 ]
-    elif len( str_code ) == 10:
-        _part_id = str_code[ 0 ] + str_code[ 1 ] + str_code[ 2 ]
-
-    if len( str_code ) == 10 and int( _part_id ) in range_id:
-        to_tal = 0
-        for x in range( 1, 10 ):
-            s_ad = int( str_code[ x - 1 ] ) * (11 - x)
-            to_tal = to_tal + s_ad
-        avr = to_tal % 11
-        if int( avr ) < 2 and int( str_code[ 9 ] ) == int( avr ):
-            return True
-        elif int( avr ) >= 2:
-            if (11 - int( avr )) == int( str_code[ 9 ] ):
-                return True
-
     return False
 
 
